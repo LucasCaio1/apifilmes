@@ -1,5 +1,10 @@
 package com.br.lucas.apifilme.modelo;
-
+/**
+ *Enum que representa os gêneros de um filme.
+ *@see  com.br.lucas.apifilme.modelo.Filme
+ *
+ *@author Lucas Caio Vargas
+ */
 public enum Genero {
 
 	ACAO,
@@ -30,7 +35,8 @@ public enum Genero {
 	SUPER_HEROI,
 	SUSPENSE,
 	TERROR,
-	THRILLER;
+	THRILLER,
+	TRASHER;
 
 
 }
