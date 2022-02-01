@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class FilmeDto {
 	
 	private String titulo;
-	@JsonProperty("ano")
+	@JsonProperty("data")
 	@JsonFormat(pattern = "dd/MM/yyyy")
-	private LocalDate ano;
+	private LocalDate data;
 	@Enumerated(EnumType.STRING)
 	private Genero genero;
 	private String diretor;
@@ -28,7 +28,7 @@ public class FilmeDto {
 	
 	public FilmeDto(Filme filme) {
 		this.titulo = filme.getTitulo();
-		this.ano = filme.getAno();
+		this.data = filme.getAno();
 		this.genero = filme.getGenero();
 		this.diretor = filme.getDiretor();
 		this.comentario = filme.getComentario();
@@ -37,7 +37,7 @@ public class FilmeDto {
 		return titulo;
 	}
 	public LocalDate getAno() {
-		return ano;
+		return data;
 	}
 	public Genero getGenero() {
 		return genero;

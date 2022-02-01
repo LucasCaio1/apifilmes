@@ -36,7 +36,7 @@ public enum Genero {
 	SUSPENSE,
 	TERROR,
 	THRILLER,
-	TRASHER;
+	TRASH;
 
 
 }

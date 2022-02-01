@@ -27,7 +27,7 @@ public class Filme {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String titulo;
-	private LocalDate ano;
+	private LocalDate data;
 	@Enumerated(EnumType.STRING)
 	private Genero genero;
 	private String diretor;
@@ -39,7 +39,7 @@ public class Filme {
 
 	public Filme(String titulo, LocalDate ano, Genero genero, String diretor, String comentario) {
 		this.titulo = titulo;
-		this.ano = ano;
+		this.data = ano;
 		this.genero = genero;
 		this.diretor = diretor;
 		this.comentario = comentario;
@@ -58,11 +58,11 @@ public class Filme {
 	}
 
 	public LocalDate getAno() {
-		return ano;
+		return data;
 	}
 
 	public void setAno(LocalDate ano) {
-		this.ano = ano;
+		this.data = ano;
 	}
 
 	public Genero getGenero() {

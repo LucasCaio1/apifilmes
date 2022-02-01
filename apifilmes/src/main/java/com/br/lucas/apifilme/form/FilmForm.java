@@ -23,9 +23,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class FilmForm {
 
 	private String titulo;
-	@JsonProperty("ano")
+	@JsonProperty("data")
 	@JsonFormat(pattern = "dd/MM/yyyy")
-	private LocalDate ano;
+	private LocalDate data;
 	@Enumerated(EnumType.STRING)
 	private Genero genero;
 	private String diretor;
@@ -40,11 +40,11 @@ public class FilmForm {
 	}
 
 	public LocalDate getAno() {
-		return ano;
+		return data;
 	}
 
 	public void setAno(LocalDate ano) {
-		this.ano = ano;
+		this.data = ano;
 	}
 
 	public Genero getGenero() {
@@ -81,7 +81,7 @@ public class FilmForm {
 		Optional<Filme> optional = repository.findByTitulo(titulo); 
 
 		if (optional.isEmpty()) {
-			Filme filme = new Filme(titulo, ano, genero, diretor, comentario);
+			Filme filme = new Filme(titulo, data, genero, diretor, comentario);
 			return ResponseEntity.ok(filme);
 		} else {
 			throw new IllegalArgumentException("O filme já existe no Banco de Dados!");
