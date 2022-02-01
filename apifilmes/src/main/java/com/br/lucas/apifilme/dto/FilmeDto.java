@@ -28,7 +28,7 @@ public class FilmeDto {
 	
 	public FilmeDto(Filme filme) {
 		this.titulo = filme.getTitulo();
-		this.data = filme.getAno();
+		this.data = filme.getData();
 		this.genero = filme.getGenero();
 		this.diretor = filme.getDiretor();
 		this.comentario = filme.getComentario();
@@ -36,7 +36,7 @@ public class FilmeDto {
 	public String getTitulo() {
 		return titulo;
 	}
-	public LocalDate getAno() {
+	public LocalDate getData() {
 		return data;
 	}
 	public Genero getGenero() {

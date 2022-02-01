@@ -5,15 +5,23 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.br.lucas.apifilme.dto.FilmeDto;
+import com.br.lucas.apifilme.dto.FilmeTituloGeneroDataDto;
 import com.br.lucas.apifilme.form.FilmForm;
 import com.br.lucas.apifilme.modelo.Filme;
 import com.br.lucas.apifilme.repository.FilmeRepository;
@@ -39,10 +47,11 @@ public class FilmeController {
 	FilmeRepository filmeRepository;
 
 	/**
-	 * Cadastra um novo filme á partir de um json recebido, seguindo o padrão form.
+	 * Cadastra um novo filme no banco de dados á partir de um json recebido, seguindo o padrão form.
 	 * 
 	 * @param form  Formulário a ser seguido para pegar um json do usuário.
 	 * @param uriComponentsBuilder  Usada para criar uma uri.
+	 * @return devolve created se conseguir criar o filme no banco ou badRequest caso não.
 	 * @see com.br.lucas.apifilme.form.FilmForm
 	 */
 
@@ -60,5 +69,18 @@ public class FilmeController {
 			e.printStackTrace();
 		}
 		return ResponseEntity.badRequest().build();
+	}
+	
+	/**
+	 * Devolve um Page de todos os filmes, com o cabeçalho: título, data, gênero.
+	 * @param paginacao
+	 * @return um Page de todos os filmes.
+	 * @see package com.br.lucas.apifilme.dto.FilmeTituloGeneroDataDto
+	 */
+	@Cacheable(value = "listaDeFilmes")
+	@GetMapping("/listar")
+	public Page<FilmeTituloGeneroDataDto> listar (@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
+		Page<Filme> listaDeFilmes = filmeRepository.findAll(paginacao);
+		return FilmeTituloGeneroDataDto.converter(listaDeFilmes);
 	}
 }

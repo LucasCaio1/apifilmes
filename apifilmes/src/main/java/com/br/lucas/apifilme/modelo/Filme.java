@@ -37,9 +37,9 @@ public class Filme {
 		
 	}
 
-	public Filme(String titulo, LocalDate ano, Genero genero, String diretor, String comentario) {
+	public Filme(String titulo, LocalDate data, Genero genero, String diretor, String comentario) {
 		this.titulo = titulo;
-		this.data = ano;
+		this.data = data;
 		this.genero = genero;
 		this.diretor = diretor;
 		this.comentario = comentario;
@@ -57,11 +57,11 @@ public class Filme {
 		this.titulo = titulo;
 	}
 
-	public LocalDate getAno() {
+	public LocalDate getData() {
 		return data;
 	}
 
-	public void setAno(LocalDate ano) {
+	public void setData(LocalDate ano) {
 		this.data = ano;
 	}
 
