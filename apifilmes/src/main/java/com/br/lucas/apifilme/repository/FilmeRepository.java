@@ -38,4 +38,12 @@ public interface FilmeRepository extends JpaRepository<Filme, Long> {
 	 */
 	Page<Filme> findByGenero(Genero genero, Pageable paginacao);
 	
+	/**
+	 * Procura no banco de dados os filmes através do diretor passado no parâmetro.
+	 * @param diretor
+	 * @param page
+	 * @return um Page de um filme de acordo com o diretor passsado no parâmetro.
+	 */
+	Page<Filme> findByDiretor(String diretor, Pageable page);
+	
 }

@@ -24,6 +24,7 @@ import com.br.lucas.apifilme.dto.FilmeDto;
 import com.br.lucas.apifilme.dto.FilmeTituloGeneroDataDto;
 import com.br.lucas.apifilme.form.BuscaPorGeneroForm;
 import com.br.lucas.apifilme.form.BuscaPorTituloForm;
+import com.br.lucas.apifilme.form.BuscarPorDiretorForm;
 import com.br.lucas.apifilme.form.FilmForm;
 import com.br.lucas.apifilme.modelo.Filme;
 import com.br.lucas.apifilme.repository.FilmeRepository;
@@ -119,8 +120,29 @@ public class FilmeController {
 	 */
 	@Cacheable(value = "listaDeFilmesTitulo")
 	@GetMapping("/buscarTitulo")
-	public Page<FilmeDto> buscarTitulo(@RequestBody @Valid BuscaPorTituloForm form,@PageableDefault(sort = "data", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
+	public Page<FilmeDto> buscarTitulo(@RequestBody @Valid BuscaPorTituloForm form,@PageableDefault(sort = "data", direction = Direction.ASC, page = 0, size = 1) Pageable paginacao) {
 		Page<Filme> filmePage = filmeRepository.findByTitulo(form.getTitulo(), paginacao);
 		return FilmeDto.converter(filmePage);
 	}
+	
+	/**
+	 * Devolve um Page dos filmes de acordo com o diretor; o cabeçalho do retorno é o seguinte: título, gênero, diretor, comentário, data.
+	 * @param form
+	 * @param paginacao
+	 * @return o filme buscado pelo diretor.
+	 * @see  com.br.lucas.apifilme.form.BuscaPorDiretorForm
+	 * @see com.br.lucas.apifilme.dto.FilmeDto
+	 */
+	@Cacheable(value = "listaDeFilmesDiretor")
+	@GetMapping("/buscarDiretor")
+	public Page<FilmeDto> buscarDiretor(@RequestBody @Valid BuscarPorDiretorForm form, @PageableDefault(sort = "data", direction = Direction.ASC, page = 0, size = 1) Pageable paginacao) {
+		Page<Filme> filmePage = filmeRepository.findByDiretor(form.getDiretor(), paginacao);
+		return FilmeDto.converter(filmePage);
+	}
 }
+	
+	
+	
+	
+	
+	
