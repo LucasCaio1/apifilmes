@@ -23,9 +23,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.br.lucas.apifilme.dto.FilmeDto;
 import com.br.lucas.apifilme.dto.FilmeTituloGeneroDataDto;
 import com.br.lucas.apifilme.form.BuscaPorGeneroForm;
+import com.br.lucas.apifilme.form.BuscaPorTituloForm;
 import com.br.lucas.apifilme.form.FilmForm;
 import com.br.lucas.apifilme.modelo.Filme;
-import com.br.lucas.apifilme.modelo.Genero;
 import com.br.lucas.apifilme.repository.FilmeRepository;
 
 /**
@@ -63,7 +63,7 @@ public class FilmeController {
 
 	@PostMapping("/cadastrar")
 	@Transactional
-	@CacheEvict(value = "listaDeFilmes", allEntries = true)
+	@CacheEvict(cacheNames = {"listaDeFilmesGenero", "listaDeFilmes", "listaDeFilmesTitulo"}, allEntries = true)
 	public ResponseEntity<FilmeDto> cadastrar(@RequestBody @Valid FilmForm form,
 			UriComponentsBuilder uriComponentsBuilder) {
 		try {
@@ -101,12 +101,27 @@ public class FilmeController {
 	 * @see com.br.lucas.apifilme.form.BuscaPorGeneroForm
 	 * @see com.br.lucas.apifilme.dto.FilmeTituloGeneroDataDto
 	 */
-	@Cacheable(value = "listaDeFilmes")
+	@Cacheable(value = "listaDeFilmesGenero")
 	@GetMapping("/buscarGenero")
 	public Page<FilmeTituloGeneroDataDto> buscarGenero(
 			@RequestBody @Valid BuscaPorGeneroForm form,
 			@PageableDefault(sort = "data", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
 		Page<Filme> filmePage = filmeRepository.findByGenero(form.getGenero(), paginacao);
 		return FilmeTituloGeneroDataDto.converter(filmePage);
+	}
+	
+	/**
+	 * Devolve um Page dos filmes de acordo com o título; o cabeçalho do retorno é o seguinte: título, gênero, diretor, comentário, data.
+	 * @param form
+	 * @param paginacao
+	 * @return o filme buscado pelo título.
+	 * @see  com.br.lucas.apifilme.form.BuscaPorTituloForm
+	 * @see com.br.lucas.apifilme.dto.FilmeDto
+	 */
+	@Cacheable(value = "listaDeFilmesTitulo")
+	@GetMapping("/buscarTitulo")
+	public Page<FilmeDto> buscarTitulo(@RequestBody @Valid BuscaPorTituloForm form,@PageableDefault(sort = "data", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
+		Page<Filme> filmePage = filmeRepository.findByTitulo(form.getTitulo(), paginacao);
+		return FilmeDto.converter(filmePage);
 	}
 }

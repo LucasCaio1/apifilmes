@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import org.springframework.data.domain.Page;
+
 import com.br.lucas.apifilme.modelo.Filme;
 import com.br.lucas.apifilme.modelo.Genero;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -47,6 +49,9 @@ public class FilmeDto {
 	}
 	public String getComentario() {
 		return comentario;
+	}
+	public static Page<FilmeDto> converter(Page<Filme> filmePage) {
+		return filmePage.map(FilmeDto::new);
 	}
 	
 	

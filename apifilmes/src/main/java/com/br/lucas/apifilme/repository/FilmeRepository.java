@@ -23,6 +23,14 @@ public interface FilmeRepository extends JpaRepository<Filme, Long> {
 	Optional<Filme> findByTitulo(String titulo); 
 	
 	/**
+	 * Procura no banco de dados um filme através do título passado no parâmetro.
+	 * @param titulo Título de um filme.
+	 * @param paginacao
+	 * @return um Page de um filme de acordo com o título passsado no parâmetro.
+	 */
+	Page<Filme> findByTitulo(String titulo, Pageable paginacao);
+	
+	/**
 	 * Procura no banco de dados os filmes através do gênero passado no parâmetro.
 	 * @param genero
 	 * @param paginacao
