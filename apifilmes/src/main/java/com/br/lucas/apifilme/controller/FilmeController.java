@@ -80,11 +80,10 @@ public class FilmeController {
 	}
 
 	/**
-	 * Devolve um Page de todos os filmes, com o cabeçalho: título, data, gênero.
-	 * 
+	 * Devolve um Page de todos os filmes; o cabeçalho do retorno é o seguinte: título, data, gênero. 
 	 * @param paginacao
-	 * @return um Page de todos os filmes.
-	 * @see package com.br.lucas.apifilme.dto.FilmeTituloGeneroDataDto
+	 * @return Todos os filmes.
+	 * @see com.br.lucas.apifilme.dto.FilmeTituloGeneroDataDto
 	 */
 	@Cacheable(value = "listaDeFilmes")
 	@GetMapping("/listar")
@@ -94,6 +93,14 @@ public class FilmeController {
 		return FilmeTituloGeneroDataDto.converter(filmePage);
 	}
 
+	/**
+	 * Devolve um Page dos filmes de acordo com o gênero; o cabeçalho do retorno é o seguinte: título, data, gênero.
+	 * @param form
+	 * @param paginacao
+	 * @return Os filmes por gênero.
+	 * @see com.br.lucas.apifilme.form.BuscaPorGeneroForm
+	 * @see com.br.lucas.apifilme.dto.FilmeTituloGeneroDataDto
+	 */
 	@Cacheable(value = "listaDeFilmes")
 	@GetMapping("/buscarGenero")
 	public Page<FilmeTituloGeneroDataDto> buscarGenero(
