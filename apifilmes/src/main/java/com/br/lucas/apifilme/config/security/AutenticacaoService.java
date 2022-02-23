@@ -2,6 +2,7 @@ package com.br.lucas.apifilme.config.security;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +14,8 @@ import com.br.lucas.apifilme.repository.UsuarioRepository;
 //Classe que faz a autenticação do usuário
 @Service
 public class AutenticacaoService implements UserDetailsService {
-
+	
+	@Autowired
 	private UsuarioRepository repository;
 
 	@Override
