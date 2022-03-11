@@ -44,20 +44,22 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	// configurações de autorização. ex: quem pode acessar qual url
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests().antMatchers(HttpMethod.GET, "/filmes/listar").permitAll()
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/filmes/listar").permitAll()
 				.antMatchers(HttpMethod.GET, "/fimes/buscarGenero").permitAll()
 				.antMatchers(HttpMethod.GET, "/filmes/buscarTitulo").permitAll()
 				.antMatchers(HttpMethod.GET, "/filmes/buscarDiretor").permitAll()
 				.antMatchers(HttpMethod.POST, "/auth").permitAll()
-				.antMatchers(HttpMethod.GET, "/actuator/**").permitAll().anyRequest().authenticated().and()
-				.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // desabilita o csrf e declara que não trabalharemos com sessão
-				.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class); 
+				.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+				.anyRequest().authenticated().and()
+				.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // desabilita o csrf e declara que não trabalharemos com sessão
+				//.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class); 
 	}
 
 	// cofigurações para recursos estático. ex: javascript, css, arquivos de imagem
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		
+		web.ignoring()
+        .antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**"); // Para ignorar o swagger na segurança
 	}
 	
 }
