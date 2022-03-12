@@ -1,6 +1,7 @@
 package com.br.lucas.apifilme.controller;
 
 import java.net.URI;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,17 +55,15 @@ public class FilmeController {
 	 * Cadastra um novo filme no banco de dados á partir de um json recebido,
 	 * seguindo o padrão form.
 	 * 
-	 * @param form                 Formulário a ser seguido para pegar um json do
-	 *                             usuário.
+	 * @param form Formulário a ser seguido para pegar um json do usuário.
 	 * @param uriComponentsBuilder Usada para criar uma uri.
-	 * @return devolve created se conseguir criar o filme no banco ou badRequest
-	 *         caso não.
+	 * @return devolve created se conseguir criar o filme no banco ou badRequest caso não.
 	 * @see com.br.lucas.apifilme.form.FilmForm
 	 */
 
 	@PostMapping("/cadastrar")
 	@Transactional
-	@CacheEvict(cacheNames = {"listaDeFilmesGenero", "listaDeFilmes", "listaDeFilmesTitulo"}, allEntries = true)
+	@CacheEvict(cacheNames = { "listaDeFilmesGenero", "listaDeFilmes", "listaDeFilmesTitulo" }, allEntries = true)
 	public ResponseEntity<FilmeDto> cadastrar(@RequestBody @Valid FilmForm form,
 			UriComponentsBuilder uriComponentsBuilder) {
 		try {
@@ -80,7 +80,9 @@ public class FilmeController {
 	}
 
 	/**
-	 * Devolve um Page de todos os filmes; o cabeçalho do retorno é o seguinte: título, data, gênero. 
+	 * Devolve um Page de todos os filmes; o cabeçalho do retorno é o seguinte:
+	 * título, data, gênero.
+	 * 
 	 * @param paginacao
 	 * @return Todos os filmes.
 	 * @see com.br.lucas.apifilme.dto.FilmeTituloGeneroDataDto
@@ -94,7 +96,9 @@ public class FilmeController {
 	}
 
 	/**
-	 * Devolve um Page dos filmes de acordo com o gênero; o cabeçalho do retorno é o seguinte: título, data, gênero.
+	 * Devolve um Page dos filmes de acordo com o gênero; o cabeçalho do retorno é o
+	 * seguinte: título, data, gênero.
+	 * 
 	 * @param form
 	 * @param paginacao
 	 * @return Os filmes por gênero.
@@ -103,46 +107,57 @@ public class FilmeController {
 	 */
 	@Cacheable(value = "listaDeFilmesGenero")
 	@GetMapping("/buscarGenero")
-	public Page<FilmeTituloGeneroDataDto> buscarGenero(
-			@RequestBody @Valid BuscaPorGeneroForm form,
+	public Page<FilmeTituloGeneroDataDto> buscarGenero(@RequestBody @Valid BuscaPorGeneroForm form,
 			@PageableDefault(sort = "data", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
 		Page<Filme> filmePage = filmeRepository.findByGenero(form.getGenero(), paginacao);
 		return FilmeTituloGeneroDataDto.converter(filmePage);
 	}
-	
+
 	/**
-	 * Devolve um Page dos filmes de acordo com o título; o cabeçalho do retorno é o seguinte: título, gênero, diretor, comentário, data.
+	 * Devolve um Page dos filmes de acordo com o título; o cabeçalho do retorno é o
+	 * seguinte: título, gênero, diretor, comentário, data.
+	 * 
 	 * @param form
 	 * @param paginacao
 	 * @return o filme buscado pelo título.
-	 * @see  com.br.lucas.apifilme.form.BuscaPorTituloForm
+	 * @see com.br.lucas.apifilme.form.BuscaPorTituloForm
 	 * @see com.br.lucas.apifilme.dto.FilmeDto
 	 */
 	@Cacheable(value = "listaDeFilmesTitulo")
 	@GetMapping("/buscarTitulo")
-	public Page<FilmeDto> buscarTitulo(@RequestBody @Valid BuscaPorTituloForm form,@PageableDefault(sort = "data", direction = Direction.ASC, page = 0, size = 1) Pageable paginacao) {
+	public Page<FilmeDto> buscarTitulo(@RequestBody @Valid BuscaPorTituloForm form,
+			@PageableDefault(sort = "data", direction = Direction.ASC, page = 0, size = 1) Pageable paginacao) {
 		Page<Filme> filmePage = filmeRepository.findByTitulo(form.getTitulo(), paginacao);
 		return FilmeDto.converter(filmePage);
 	}
-	
+
 	/**
-	 * Devolve um Page dos filmes de acordo com o diretor; o cabeçalho do retorno é o seguinte: título, gênero, diretor, comentário, data.
+	 * Devolve um Page dos filmes de acordo com o diretor; o cabeçalho do retorno é
+	 * o seguinte: título, gênero, diretor, comentário, data.
+	 * 
 	 * @param form
 	 * @param paginacao
 	 * @return o filme buscado pelo diretor.
-	 * @see  com.br.lucas.apifilme.form.BuscaPorDiretorForm
+	 * @see com.br.lucas.apifilme.form.BuscaPorDiretorForm
 	 * @see com.br.lucas.apifilme.dto.FilmeDto
 	 */
 	@Cacheable(value = "listaDeFilmesDiretor")
 	@GetMapping("/buscarDiretor")
-	public Page<FilmeDto> buscarDiretor(@RequestBody @Valid BuscarPorDiretorForm form, @PageableDefault(sort = "data", direction = Direction.ASC, page = 0, size = 1) Pageable paginacao) {
+	public Page<FilmeDto> buscarDiretor(@RequestBody @Valid BuscarPorDiretorForm form,
+			@PageableDefault(sort = "data", direction = Direction.ASC, page = 0, size = 1) Pageable paginacao) {
 		Page<Filme> filmePage = filmeRepository.findByDiretor(form.getDiretor(), paginacao);
 		return FilmeDto.converter(filmePage);
 	}
+
+	@DeleteMapping("/apagarFilme")
+	public ResponseEntity<?> apagarFilme(@RequestBody @Valid BuscaPorTituloForm form) {
+		Optional<Filme> tituloFilme = filmeRepository.findByTitulo(form.getTitulo());
+		if (tituloFilme.isPresent()) {
+			filmeRepository.delete(tituloFilme.get());
+			ResponseEntity.ok().build();
+		}
+
+		return ResponseEntity.notFound().build();
+
+	}
 }
-	
-	
-	
-	
-	
-	

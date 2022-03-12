@@ -3,7 +3,6 @@ package com.br.lucas.apifilme.config.security;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +16,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class TokenService {
 
 	@Value("${apifilmes.jwt.expiration}")
-	private String expiration; //data de expiração passada via arquivo applications.properties
+	private String expiration; // data de expiração passada via arquivo applications.properties
 
-	@Value("${apifilmes.jwt.secret}") 
+	@Value("${apifilmes.jwt.secret}")
 	private String secret;
- 
+
 	public String gerarToken(Authentication authenticate) {
 		Usuario logado = (Usuario) authenticate.getPrincipal();
 		Date hoje = new Date();
@@ -38,11 +37,11 @@ public class TokenService {
 			return false;
 		}
 	}
-	
-	//busca o id do usuario logado via token
+
+	// busca o id do usuario logado via token
 	public Long getIdUsuario(String token) {
 		Claims claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
-		return  Long.parseLong(claims.getSubject());
+		return Long.parseLong(claims.getSubject());
 	}
 
 }
