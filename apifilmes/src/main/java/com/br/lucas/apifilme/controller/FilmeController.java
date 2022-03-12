@@ -148,7 +148,13 @@ public class FilmeController {
 		Page<Filme> filmePage = filmeRepository.findByDiretor(form.getDiretor(), paginacao);
 		return FilmeDto.converter(filmePage);
 	}
-
+	
+	/**
+	 * Apaga um filme do banco.
+	 * @param form
+	 * @return 
+	 * @see com.br.lucas.apifilme.form.BuscaPorTituloForm
+	 */
 	@DeleteMapping("/apagarFilme")
 	public ResponseEntity<?> apagarFilme(@RequestBody @Valid BuscaPorTituloForm form) {
 		Optional<Filme> tituloFilme = filmeRepository.findByTitulo(form.getTitulo());
